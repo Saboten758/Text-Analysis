@@ -7,8 +7,6 @@ from transformers import pipeline, set_seed
 import zipfile
 
 print("LOADING...")
-generator = pipeline('text-generation', model='gpt2')
-set_seed(41)
 
 st.set_page_config(page_title="Text Generation", page_icon="📖", layout="wide")
 def load_url(url):
@@ -26,6 +24,8 @@ lottie_anim = load_url("https://lottie.host/502b1b25-0fa6-41ca-a9c2-ad0b12947ae8
 lottie_anim2=load_url("https://lottie.host/654b0be8-0faf-4b11-94c2-aa0a6a1aa417/f8Nr08Bedw.json")
 def generate(txt,z):
     try:
+        generator = pipeline('text-generation', model='gpt2')
+        set_seed(41)
         x = generator(txt, max_length=z, num_return_sequences=5, truncation=True)
         output = x[0]['generated_text']
         try:
@@ -60,7 +60,7 @@ def generate(txt,z):
         return None
 
 
-def home_page():
+def gen_page():
 
     st.write("""
     # Welcome To Text Generation!:wave:
@@ -70,22 +70,22 @@ def home_page():
     with st.container():
         left_column, right_column = st.columns(2)
         with left_column:
-            user_input = st.text_input("Start by typing the context here:")
+            user_input = st.text_area("Start by typing the context here:", "")
             z= 10
             z= st.slider("Generation Size:", 10, 1000)
             if st.button("Generate Now"):
                 if user_input:
                     st.write("---")
-                    st.write("GENERATING....")
-                    if lottie_anim2:
-                        st_lottie(lottie_anim2, height=70, key='anim2')
-                    else:
-                        st.error("Failed to load animation")
-                    out = generate(user_input,z)
-                    if out:
-                        st.write("The Result:")
-                        st.write(f"{out}")
-                        st.write("---")
+                    with st.spinner("Generating..."):
+                        if lottie_anim2:
+                            st_lottie(lottie_anim2, height=60, key='anim2')
+                        else:
+                            st.error("Failed to load animation")
+                        out = generate(user_input,z)
+                        if out:
+                            st.write("The Result:")
+                            st.write(f"{out}")
+                            st.write("---")
                     
         with right_column:
             if lottie_anim:
@@ -93,18 +93,37 @@ def home_page():
             else:
                 st.error("Failed to load animation")
 
+def analysis_page():
+    st.title("Sentiment Analysis")
+    st.write("Enter the text you want to analyze:")
+    user_input = st.text_area("Input Text", "")
+
+    if st.button("Analyze"):
+        st.write("Analyzing...")
+        with st.spinner("Analyzing..."):
+            
+            context_analyzer = pipeline("sentiment-analysis", model="finiteautomata/bertweet-base-sentiment-analysis")
+
+
+            analysis_result = context_analyzer(user_input)
+
+      
+        st.write("Analysis Result:")
+        st.write(analysis_result[0]["label"])
+        st.write(f"Score:{analysis_result[0]['score']}")
 
 def about_page():
     st.title("About Us")
-    st.write("We are a team of AI developers.")
-    st.write("Our mission is to make AI accessible to everyone.")
-
+    st.write("I am Saboten")
 
 st.sidebar.title("Navigation")
-selected_page = st.sidebar.radio("Go to:", ("Home", "About"))
+selected_page = st.sidebar.radio("Go to:", ("Text Generation", "Sentiment Analysis","About"))
 
 
-if selected_page == "Home":
-    home_page()
+if selected_page == "Text Generation":
+    gen_page()
+
+elif selected_page=="Sentiment Analysis":
+    analysis_page()
 elif selected_page == "About":
     about_page()
