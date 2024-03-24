@@ -153,10 +153,10 @@ def music_gen(txt,time_given):
 
 def music_page():
     st.write("# This Page Generates Music from Text🎵")
-    st.write("Enter Your Prompt below to generate some music:")
-    prompt = st.text_area("Enter Below:", "")
+    st.write("Enter your prompt below to generate some music:")
+    prompt = st.text_area("Enter Here:", "")
     time_given= 5
-    time_given= st.slider("How Many Seconds to generate (Note: Increasing this may lead to longer generation times):", 5, 30)
+    time_given= st.slider("How Many Seconds to generate (Note: Increasing this may lead to longer generation times):", 5, 10)
     if st.button("Generate"):
         with st.spinner("Generating..."):
             st.write("---")
