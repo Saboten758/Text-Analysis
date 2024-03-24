@@ -3,8 +3,9 @@ import requests
 from streamlit_lottie import st_lottie
 from gtts import gTTS
 from fpdf import FPDF
-from transformers import pipeline, set_seed
+from transformers import pipeline, set_seed,AutoProcessor, MusicgenForConditionalGeneration
 import zipfile
+import scipy
 
 print("LOADING...")
 
@@ -102,9 +103,6 @@ def gen_page():
                             st.write("The Result:")
                             st.write(f"{out}")
                             st.write("---")
-                    
-       
-
 
 def analysis_page():
     st.title("Sentiment Analysis")
@@ -133,8 +131,40 @@ def about_page():
     st.title("About Me")
     st.write("I am Saboten")
 
+def music_gen(txt,time_given):
+    processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
+    model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
+
+    inputs = processor(
+        text=txt,
+        padding=True,
+        return_tensors="pt",
+    )
+    new_tokens=int(51.2*time_given)
+    audio_values = model.generate(**inputs, max_new_tokens=new_tokens)
+
+    sampling_rate = model.config.audio_encoder.sampling_rate
+    scipy.io.wavfile.write("musicgen_out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
+    st.write("Click Here to play:")
+    st.audio("musicgen_out.wav", format="audio/wav")
+    with open("musicgen_out.wav", "rb") as f:
+        d = f.read()
+        st.download_button("Download Audio", data=d, key="audio_download", file_name='music_gen_out.wav')
+
+def music_page():
+    st.write("# This Page Generates Music from Text🎵")
+    st.write("Enter Your Prompt below to generate some music:")
+    prompt = st.text_area("Input Text", "")
+    time_given= 5
+    time_given= st.slider("How Many Seconds to generate (Note: Increasing this may lead to longer generation times):", 5, 30)
+    if st.button("Generate"):
+        with st.spinner("Generating..."):
+            st.write("---")
+            music_gen(prompt,time_given)
+
+
 st.sidebar.title("Navigation")
-selected_page = st.sidebar.radio("Go to:", ("Text Generation", "Sentiment Analysis","About"))
+selected_page = st.sidebar.radio("Go to:", ("Text Generation", "Sentiment Analysis","Music Generation","About"))
 
 
 if selected_page == "Text Generation":
@@ -142,5 +172,9 @@ if selected_page == "Text Generation":
 
 elif selected_page=="Sentiment Analysis":
     analysis_page()
+
+elif selected_page=="Music Generation":
+    music_page()
+
 elif selected_page == "About":
     about_page()
