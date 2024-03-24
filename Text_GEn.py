@@ -8,7 +8,7 @@ import zipfile
 
 print("LOADING...")
 
-st.set_page_config(page_title="Text Generation", page_icon="📖", layout="wide")
+st.set_page_config(page_title="Text Analysis", page_icon="📖", layout="wide")
 def load_url(url):
     try:
         r = requests.get(url)
@@ -107,10 +107,16 @@ def analysis_page():
 
             analysis_result = context_analyzer(user_input)
 
-      
+        label=str(analysis_result[0]["label"])
+        score=analysis_result[0]['score']
+        print(label)
         st.write("Analysis Result:")
-        st.write(analysis_result[0]["label"])
-        st.write(f"Score:{analysis_result[0]['score']}")
+        if label=='NEG':
+            st.warning(f"NEGATIVE with a score of {score}")
+        elif label=='POS':
+            st.success(f"POSITIVE with a score of {score}")
+        else:
+            st.write(f"NEUTRAL with a score of {score}")
 
 def about_page():
     st.title("About Us")
