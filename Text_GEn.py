@@ -6,7 +6,7 @@ from fpdf import FPDF
 from transformers import pipeline, set_seed,AutoProcessor, MusicgenForConditionalGeneration
 import zipfile
 import scipy
-
+import os
 print("LOADING...")
 
 st.set_page_config(page_title="Text Analysis", page_icon="📖", layout="wide")
@@ -66,9 +66,23 @@ def generate(txt,z,mod):
         st.error(f"Error generating text: {e}")
         return None
 
+def cleanup():
+    try:
+        # Delete temporary files
+        os.remove("output.mp3")
+        os.remove("output.txt")
+        os.remove("output.zip")
+        os.remove("musicgen_out.wav")
+
+        del generator
+        del context_analyzer
+
+        print("Cleanup complete.")
+    except Exception as e:
+        print(f"Error during cleanup: {e}")
 
 def gen_page():
-
+    cleanup()
     st.write("""
     # Welcome To Text Generation!:wave:
     This uses a GPT-2 Model to generate text from context
@@ -108,6 +122,7 @@ def gen_page():
                             st.write("---")
 
 def analysis_page():
+    cleanup()
     st.title("Sentiment Analysis")
     st.write("Enter the text you want to analyze:")
     user_input = st.text_area("Input Text", "")
@@ -131,6 +146,7 @@ def analysis_page():
             st.write(f"NEUTRAL with a score of {score}")
 
 def about_page():
+    cleanup()
     st.title("About Me")
     st.write("I am Saboten")
 
@@ -155,6 +171,7 @@ def music_gen(txt,time_given):
         st.download_button("Download Audio", data=d, key="audio_download", file_name='music_gen_out.wav')
 
 def music_page():
+    cleanup()
     st.write("# This Page Generates Music from Text🎵")
     st.write("Enter your prompt below to generate some music:")
     prompt = st.text_area("Enter Here:", "")
