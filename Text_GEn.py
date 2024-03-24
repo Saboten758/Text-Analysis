@@ -76,7 +76,7 @@ def gen_page():
         with right_column:
             option = st.selectbox(
             'Which Model to use?',
-            ('gpt2','EleutherAI/gpt-neo-1.3B'))
+            ('gpt2','gpt2-medium'))
 
             st.write('You selected:', option)
             if lottie_anim:
