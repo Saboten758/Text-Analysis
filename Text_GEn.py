@@ -25,7 +25,7 @@ lottie_anim2=load_url("https://lottie.host/654b0be8-0faf-4b11-94c2-aa0a6a1aa417/
 
 def generate(txt,z,mod):
     try:
-        generator = pipeline('text-generation', model=mod)
+        generator = pipeline('text-generation', model=mod,device_map="auto")
         set_seed(42)
 
         x = generator(txt, max_length=z,  truncation=True)
