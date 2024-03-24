@@ -27,6 +27,7 @@ def generate(txt,z,mod):
     try:
         generator = pipeline('text-generation', model=mod)
         set_seed(42)
+        
         x = generator(txt, max_length=z,  truncation=True)
         #x = generator(txt, max_length=z, num_return_sequences=5, truncation=True)
         output = x[0]['generated_text']
