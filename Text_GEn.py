@@ -27,7 +27,7 @@ def generate(txt,z,mod):
     try:
         generator = pipeline('text-generation', model=mod)
         set_seed(42)
-        
+
         x = generator(txt, max_length=z,  truncation=True)
         #x = generator(txt, max_length=z, num_return_sequences=5, truncation=True)
         output = x[0]['generated_text']
@@ -76,7 +76,7 @@ def gen_page():
         with right_column:
             option = st.selectbox(
             'Which Model to use?',
-            ('gpt2', 'gpt2-medium','microsoft/phi-2'))
+            ('gpt2', 'gpt2-medium','gpt2-large'))
 
             st.write('You selected:', option)
             if lottie_anim:
@@ -130,7 +130,7 @@ def analysis_page():
             st.write(f"NEUTRAL with a score of {score}")
 
 def about_page():
-    st.title("About Us")
+    st.title("About Me")
     st.write("I am Saboten")
 
 st.sidebar.title("Navigation")
