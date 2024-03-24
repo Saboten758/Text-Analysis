@@ -22,6 +22,7 @@ def load_url(url):
 
 lottie_anim = load_url("https://lottie.host/502b1b25-0fa6-41ca-a9c2-ad0b12947ae8/uoZ79rCdmU.json")
 lottie_anim2=load_url("https://lottie.host/654b0be8-0faf-4b11-94c2-aa0a6a1aa417/f8Nr08Bedw.json")
+
 def generate(txt,z):
     try:
         generator = pipeline('text-generation', model='gpt2')
@@ -42,7 +43,7 @@ def generate(txt,z):
         try:
             with open("output.txt", "w") as f:
                 f.write(output)
-            st.success("Text file generated! Click the link below to download:")
+            st.success("Both audio and text file generated! Click the links below to download!")
             st.download_button("Download Text", data=output, key="file_download",file_name="text_gen_out.txt")
         except:
             st.warning("ERROR GENERATING PDF")
