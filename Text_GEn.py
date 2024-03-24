@@ -23,11 +23,12 @@ def load_url(url):
 lottie_anim = load_url("https://lottie.host/502b1b25-0fa6-41ca-a9c2-ad0b12947ae8/uoZ79rCdmU.json")
 lottie_anim2=load_url("https://lottie.host/654b0be8-0faf-4b11-94c2-aa0a6a1aa417/f8Nr08Bedw.json")
 
-def generate(txt,z):
+def generate(txt,z,mod):
     try:
-        generator = pipeline('text-generation', model='gpt2')
-        set_seed(41)
-        x = generator(txt, max_length=z, num_return_sequences=5, truncation=True)
+        generator = pipeline('text-generation', model=mod)
+        set_seed(42)
+        x = generator(txt, max_length=z,  truncation=True)
+        #x = generator(txt, max_length=z, num_return_sequences=5, truncation=True)
         output = x[0]['generated_text']
         try:
             lang = 'en-us'
@@ -46,7 +47,7 @@ def generate(txt,z):
             st.success("Both audio and text file generated! Click the links below to download!")
             st.download_button("Download Text", data=output, key="file_download",file_name="text_gen_out.txt")
         except:
-            st.warning("ERROR GENERATING PDF")
+            st.warning("ERROR GENERATING FILE")
 
         with zipfile.ZipFile("output.zip", "w") as zip_file:
             zip_file.write("output.mp3")
@@ -67,10 +68,23 @@ def gen_page():
     # Welcome To Text Generation!:wave:
     This uses a GPT-2 Model to generate text from context
     """)
+    
     out=None
     with st.container():
         left_column, right_column = st.columns(2)
+        with right_column:
+            option = st.selectbox(
+            'Which Model to use?',
+            ('gpt2', 'gpt2-medium','microsoft/phi-2'))
+
+            st.write('You selected:', option)
+            if lottie_anim:
+                st_lottie(lottie_anim, height=200, key='anim')
+            else:
+                st.error("Failed to load animation")
+
         with left_column:
+            
             user_input = st.text_area("Start by typing the context here:", "")
             z= 10
             z= st.slider("Generation Size:", 10, 1000)
@@ -82,17 +96,14 @@ def gen_page():
                             st_lottie(lottie_anim2, height=60, key='anim2')
                         else:
                             st.error("Failed to load animation")
-                        out = generate(user_input,z)
+                        out = generate(user_input,z,option)
                         if out:
                             st.write("The Result:")
                             st.write(f"{out}")
                             st.write("---")
                     
-        with right_column:
-            if lottie_anim:
-                st_lottie(lottie_anim, height=200, key='anim')
-            else:
-                st.error("Failed to load animation")
+       
+
 
 def analysis_page():
     st.title("Sentiment Analysis")
@@ -104,8 +115,6 @@ def analysis_page():
         with st.spinner("Analyzing..."):
             
             context_analyzer = pipeline("sentiment-analysis", model="finiteautomata/bertweet-base-sentiment-analysis")
-
-
             analysis_result = context_analyzer(user_input)
 
         label=str(analysis_result[0]["label"])
