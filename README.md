@@ -50,6 +50,7 @@ Sentiment Analysis Page<br/>
 <img src="https://i.imgur.com/5dlQdF7.png" style="display: block; margin: 0 auto" ><br/>
 Music Gen Page<br/>
 <div style="text-align:left">
+
 ## Usage
 
 Navigate to the desired section using the sidebar:
