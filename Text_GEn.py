@@ -24,6 +24,11 @@ def load_url(url):
 lottie_anim = load_url("https://lottie.host/502b1b25-0fa6-41ca-a9c2-ad0b12947ae8/uoZ79rCdmU.json")
 lottie_anim2=load_url("https://lottie.host/654b0be8-0faf-4b11-94c2-aa0a6a1aa417/f8Nr08Bedw.json")
 
+def tts_service(data,name):
+    lang = 'en-us'
+    tts = gTTS(text=data, lang=lang, slow=False)
+    tts.save(f"{name}.mp3")
+
 def generate(txt,z,mod):
     try:
         generator = pipeline('text-generation', model=mod,device_map="auto")
@@ -33,9 +38,7 @@ def generate(txt,z,mod):
         #x = generator(txt, max_length=z, num_return_sequences=5, truncation=True)
         output = x[0]['generated_text']
         try:
-            lang = 'en-us'
-            tts = gTTS(text=output, lang=lang, slow=False)
-            tts.save("output.mp3")
+            tts_service(output,"output")
             st.write("Click Here to play:")
             st.audio("output.mp3", format="audio/mp3")
             with open("output.mp3", "rb") as f:
