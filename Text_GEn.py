@@ -7,6 +7,7 @@ from transformers import pipeline, set_seed,AutoProcessor, MusicgenForConditiona
 import zipfile
 import scipy
 import os
+from PIL import Image
 print("LOADING...")
 
 st.set_page_config(page_title="Text Analysis", page_icon="📖", layout="wide")
@@ -23,6 +24,10 @@ def load_url(url):
 
 lottie_anim = load_url("https://lottie.host/502b1b25-0fa6-41ca-a9c2-ad0b12947ae8/uoZ79rCdmU.json")
 lottie_anim2=load_url("https://lottie.host/654b0be8-0faf-4b11-94c2-aa0a6a1aa417/f8Nr08Bedw.json")
+lemon=Image.open("Images/Lp.png")
+retro=Image.open("Images/rp.png")
+brr=Image.open("Images/br.png")
+fr=Image.open("Images/Action.png")
 
 def tts_service(data,name):
     lang = 'en-us'
@@ -147,8 +152,51 @@ def analysis_page():
 
 def about_page():
     cleanup()
-    st.title("About Me")
-    st.write("I am Saboten")
+    st.title("About Me:")
+    st.write(" Hi!  I am Saboten & I like Machine Learning Stuff🙂")
+   
+    with st.container():
+        st.write("# Check out some other work:")
+        img_col,txt_col=st.columns((1,2))
+        with img_col:
+            st.image(lemon)
+        with txt_col:
+            st.write("## Lemon Player")
+            st.write("This is an android based online radio player along with support for rss feeds and web games & comics all integrated into one! Check out More info on [Github](https://github.com/Saboten758/Lemon_Player)")
+            st.markdown("[Checkout Releases...](https://github.com/Saboten758/Lemon_Player/releases)")
+        
+        with st.container():
+            img_col,txt_col=st.columns((1,2))
+            with img_col:
+                st.image(retro)
+            with txt_col:
+                st.write("## Retro Pulse")
+                st.write("This is also an android based application that has automatic glow-in-dark flashlight support,sensor data analysis,device info,camera,weather, and much more.. Check out More info on [Github](https://github.com/Saboten758/Retro-Pulse)")
+        with st.container():
+            img_col,txt_col=st.columns((1,2))
+            with img_col:
+                st.image(brr)
+            with txt_col:
+                st.write("## Braillification")
+                st.write("This was build to aid the blind people. It is a Flask based web app that allows you to convert text from PDF files to Braille formatted pds and audio. Check out More info on [Github](https://github.com/Saboten758/Braillification)")
+        st.write("## Maybe some games too:")
+        st.markdown(
+        '<iframe frameborder="0" src="https://itch.io/embed/2606101?linkback=true&amp;border_width=2&amp;bg_color=a8e3a9&amp;fg_color=000000&amp;link_color=ad3338&amp;border_color=34a729" width="554" height="169"><a href="https://debjit-daw.itch.io/frog-in-exile">Frog in exile by Saboten123</a></iframe>',
+        unsafe_allow_html=True)
+        st.markdown(
+        '<iframe frameborder="0" src="https://itch.io/embed/2170857?linkback=true&amp;bg_color=a4b9d3&amp;fg_color=000000&amp;link_color=4061d7&amp;border_color=333333" width="552" height="167"><a href="https://debjit-daw.itch.io/the-unyielding-mind">The Unyielding Mind by Saboten123</a></iframe>',
+        unsafe_allow_html=True)
+    
+    st.write("---")
+    st.write("### Other Socials:")
+    with st.container():
+        l,r,z=st.columns(3)
+    with l:
+        st.write("[Github](https://github.com/Saboten758)")
+    with r:
+        st.write("[Itch.io](https://debjit-daw.itch.io/)")
+    with z:
+        st.write("[Gmail](mailto:debjitdaw03@gmail.com)")
 
 def music_gen(txt,time_given):
     processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
