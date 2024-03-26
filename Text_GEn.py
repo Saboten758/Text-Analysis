@@ -164,7 +164,15 @@ def about_page():
             st.write("## Lemon Player")
             st.write("This is an android based online radio player along with support for rss feeds and web games & comics all integrated into one! Check out More info on [Github](https://github.com/Saboten758/Lemon_Player)")
             st.markdown("[Checkout Releases...](https://github.com/Saboten758/Lemon_Player/releases)")
+        with st.container():
+            img_col,txt_col=st.columns((1,2))
+            with img_col:
+                st.image(fr)
+            with txt_col:
+                st.write("## Human Action Recognition")
+                st.write("This a collection of jupyter ipynbs which aims to recognize human actions (running,jumping,crawling,etc). Check out More info on [Github](https://github.com/Saboten758/Human_Action_Detection)")
         
+
         with st.container():
             img_col,txt_col=st.columns((1,2))
             with img_col:
@@ -179,6 +187,7 @@ def about_page():
             with txt_col:
                 st.write("## Braillification")
                 st.write("This was build to aid the blind people. It is a Flask based web app that allows you to convert text from PDF files to Braille formatted pds and audio. Check out More info on [Github](https://github.com/Saboten758/Braillification)")
+        
         st.write("## Maybe some games too:")
         st.markdown(
         '<iframe frameborder="0" src="https://itch.io/embed/2606101?linkback=true&amp;border_width=2&amp;bg_color=a8e3a9&amp;fg_color=000000&amp;link_color=ad3338&amp;border_color=34a729" width="554" height="169"><a href="https://debjit-daw.itch.io/frog-in-exile">Frog in exile by Saboten123</a></iframe>',
